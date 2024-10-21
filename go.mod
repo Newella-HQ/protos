@@ -1,4 +1,4 @@
-module github.com/Newella-HQ/protos/gen/go
+module github.com/Newella-HQ/protos
 
 go 1.22.0
 
