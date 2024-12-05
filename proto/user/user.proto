@@ -1,0 +1,9 @@
+syntax = "proto3";
+package user;
+
+option go_package = "github.com/Newella-HQ/protos/user";
+
+message User {
+  string Name = 1;
+  int64 Age = 2;
+}
