@@ -1,0 +1,140 @@
+syntax = "proto3";
+
+package usernovels;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/Newella-HQ/protos/usernovels";
+option java_multiple_files = true;
+option java_package = "newella.protos.usernovels";
+option java_outer_classname = "UserNovelsProto";
+
+// UserNovels link can have several types, for example READ and FAVOURITE
+enum UserNovelsType {
+  READ = 0;
+  FAVOURITE = 1;
+  OWN = 2;
+  CREATE = 3;
+}
+
+// lower-case for db compatibility
+enum NovelLength {
+  small = 0;
+  normal = 1;
+  large = 2;
+}
+
+message Genre {
+  int64 id = 1;
+  string name = 2;
+}
+
+message Novel {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  NovelLength length = 4;
+  string image = 5;
+  double rating = 6;
+  Genre genre = 7;
+  string user_id = 8;
+}
+
+message GetUsersNovelsRequest {
+  string user_id = 1;
+  UserNovelsType type = 2;
+  int64 limit = 3;
+  int64 page = 4;
+}
+
+message GetUsersNovelsResponse {
+  repeated Novel novels = 1;
+}
+
+message SetNovelRatingRequest {
+  int64 novel_id = 1;
+  float rating = 2;
+}
+
+message CommentUserData {
+  string user_id = 1;
+  string username = 2;
+  string picture = 3;
+}
+
+message Comment {
+  string id = 1;
+  string text = 2;
+  google.protobuf.Timestamp created_at = 3;
+  CommentUserData user = 4;
+}
+
+message GetCommentsRequest {
+  int64 novel_id = 1;
+  int64 limit = 2;
+  int64 page = 3;
+}
+
+message GetCommentsResponse {
+  repeated Comment comments = 1;
+}
+
+message CommentNovelRequest {
+  int64 novel_id = 1;
+  string text = 2;
+}
+
+message CommentNovelResponse {
+  int64 id = 1;
+}
+
+message DeleteCommentNovelRequest {
+  int64 id = 1;
+}
+
+message ComplainNovelRequest {
+  int64 novel_id = 1;
+  string subject = 2;
+  string description = 3;
+}
+
+message ComplainNovelResponse {
+  int64 id = 1;
+}
+
+message GetUserComplainsRequest {
+  int64 limit = 1;
+  int64 page = 2;
+}
+
+message Complain {
+  int64 id = 1;
+  string subject = 2;
+  string description = 3;
+  string status = 4;
+  string user_id = 5;
+  int64 novel_id = 6;
+}
+
+message GetUserComplainsResponse {
+  repeated Complain complains = 1;
+}
+
+message DeleteComplainNovelRequest {
+  int64 id = 1;
+}
+
+service UserNovelsService {
+  rpc GetUsersNovels(GetUsersNovelsRequest) returns (GetUsersNovelsResponse);
+  rpc SetNovelRating(SetNovelRatingRequest) returns (google.protobuf.Empty);
+
+  rpc GetNovelComments(GetCommentsRequest) returns (GetCommentsResponse);
+  rpc CommentNovel(CommentNovelRequest) returns (CommentNovelResponse);
+  rpc DeleteCommentNovel(DeleteCommentNovelRequest) returns (google.protobuf.Empty);
+
+  rpc GetUserComplains(GetUserComplainsRequest) returns (GetUserComplainsResponse);
+  rpc ComplainNovel(ComplainNovelRequest) returns (ComplainNovelResponse);
+  rpc DeleteComplainNovel(DeleteComplainNovelRequest) returns (google.protobuf.Empty);
+  //  rpc SaveProgress(google.protobuf.Empty) returns (google.protobuf.Empty);
+}

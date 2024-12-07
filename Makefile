@@ -11,3 +11,10 @@ gen-go:
 		--go-grpc_out=$(GO_OUT_DIR) \
 		--go-grpc_opt=paths=source_relative \
 		 $(PROTO_FILES)
+
+COPY_PROTO_TO=./proto_dir
+
+.PHONY: move-proto
+move-proto:
+	mkdir -p $(COPY_PROTO_TO)
+	cp $(PROTO_FILES) $(COPY_PROTO_TO)
